@@ -49,14 +49,20 @@ while len(dic.keys()) != 0:
         for i in key:
             temp.append(i)
         output.append((dic[key], temp))
-        
+        is_closed = True
+        is_maximal = True
         for i in item1_dic.keys():
             temp_add_1 = temp.copy()
             if i[0] not in temp_add_1:
                 temp_add_1.append(i[0])
                 count = check_freq(transactions, temp_add_1)
+                if count == check_freq(transactions, temp):
+                    is_closed = False
+                    
                 if count >= min_sup:
+                    is_maximal = False
                     new_dic[tuple(sorted(temp_add_1))] = count
+            
     remove_unfreq(new_dic, min_sup)
     dic = new_dic.copy()
     
