@@ -1,70 +1,40 @@
 from sys import stdin
+def cal_dist(point1, point2):
+    ret = (point1[0] - point2[0])**2 + (point1[1] - point2[1])**2
+    return ret
 
-def remove_unfreq(dic, min_sup):
-    to_remove = []
-    for key in dic.keys():
-        if dic[key] < min_sup:
-            to_remove.append(key)
-    for remove in to_remove:
-        dic.pop(remove)
-
-def check_freq(transactions, item_set):
-    count = 0
-    for tran in transactions:
-        add_to = True
-        for item in item_set:
-            if item not in tran:
-                add_to = False
-        if add_to:
-            count += 1
-    return count
+def classify(point, centroids):
+    min_dist = -1
+    class = 0
+    for i, centroid in enumerate(centroids):
+        dist = cal_dist(point, centroid)
+        if min_dist == -1:
             
 
-min_sup = int(input())
-
-item1_dic = {}
-dic = {}
-transactions = []
-output = []
-while(True):
+input_str = stdin.readline()
+input_str = input_str.split()
+N = int(input_str[0])
+k = int(input_str[1])
+centroids = []
+points = []
+    
+for i in range(N):
     input_str = stdin.readline()
     if (input_str == ''):
         break
-        
-    input_str = set(input_str.split())
-    transactions.append(input_str)
-    for i in input_str:
-        if (i, ) in item1_dic.keys():
-            item1_dic[(i,)] += 1
-        else:
-            item1_dic[(i,)] = 1
+    input_str = input_str.split()
+    input_str[0] = float(input_str[0])
+    input_str[1] = float(input_str[1])
+    points.append(input_str)
 
-remove_unfreq(item1_dic, min_sup)
-dic = item1_dic.copy()
-
-while len(dic.keys()) != 0:
-    new_dic = {}
-    for key in dic.keys():
-        temp = []
-        for i in key:
-            temp.append(i)
-        output.append((dic[key], temp))
-        is_closed = True
-        is_maximal = True
-        for i in item1_dic.keys():
-            temp_add_1 = temp.copy()
-            if i[0] not in temp_add_1:
-                temp_add_1.append(i[0])
-                count = check_freq(transactions, temp_add_1)
-                if count == check_freq(transactions, temp):
-                    is_closed = False
-                    
-                if count >= min_sup:
-                    is_maximal = False
-                    new_dic[tuple(sorted(temp_add_1))] = count
-            
-    remove_unfreq(new_dic, min_sup)
-    dic = new_dic.copy()
+for i in range(k):
+    input_str = stdin.readline()
+    if (input_str == ''):
+        break
+    input_str = input_str.split()
+    input_str[0] = float(input_str[0])
+    input_str[1] = float(input_str[1])
+    centroids.append(input_str)
+print(points)
+print(centroids)
     
-
-print(output)
